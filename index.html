@@ -35,6 +35,13 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             padding: 20px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .container {
@@ -44,6 +51,12 @@
             border-radius: 12px;
             box-shadow: var(--shadow);
             overflow: hidden;
+            transform: scale(0.95);
+            animation: scaleIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes scaleIn {
+            to { transform: scale(1); }
         }
         
         header {
@@ -52,6 +65,19 @@
             padding: 25px;
             text-align: center;
             position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+            opacity: 0.9;
+            z-index: 0;
         }
         
         header h1 {
@@ -61,16 +87,27 @@
             align-items: center;
             justify-content: center;
             gap: 15px;
+            position: relative;
+            z-index: 1;
         }
         
         header p {
             opacity: 0.9;
             font-size: 18px;
+            position: relative;
+            z-index: 1;
         }
         
         .logo {
             font-size: 36px;
             color: var(--warning);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
         
         .form-container {
@@ -81,7 +118,19 @@
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid var(--gray-200);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.5s ease-out forwards;
         }
+        
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-section:nth-child(1) { animation-delay: 0.2s; }
+        .form-section:nth-child(2) { animation-delay: 0.3s; }
+        .form-section:nth-child(3) { animation-delay: 0.4s; }
+        .form-section:nth-child(4) { animation-delay: 0.5s; }
         
         .form-section-title {
             font-size: 20px;
@@ -90,10 +139,16 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            transition: color 0.3s ease;
+        }
+        
+        .form-section-title:hover {
+            color: var(--secondary);
         }
         
         .form-group {
             margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
         
         label {
@@ -101,6 +156,11 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--gray-800);
+            transition: color 0.3s ease;
+        }
+        
+        label:hover {
+            color: var(--primary);
         }
         
         input, textarea, select {
@@ -109,13 +169,14 @@
             border: 2px solid var(--gray-200);
             border-radius: 8px;
             font-size: 16px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
         
         input:focus, textarea:focus, select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.2);
+            transform: translateY(-2px);
         }
         
         .row {
@@ -136,6 +197,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 10px;
+            animation: slideIn 0.3s ease-out;
         }
         
         .add-btn {
@@ -149,11 +211,18 @@
             align-items: center;
             gap: 5px;
             font-weight: 600;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
         }
         
-        .add-btn:hover {
+        .add-btn:hover:not(:disabled) {
             background: #05b387;
+            transform: translateY(-2px);
+        }
+        
+        .add-btn:disabled {
+            background: var(--gray-300);
+            cursor: not-allowed;
+            opacity: 0.7;
         }
         
         .remove-btn {
@@ -166,6 +235,12 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .remove-btn:hover {
+            background: #d90429;
+            transform: scale(1.1);
         }
         
         .checkbox-group {
@@ -174,15 +249,25 @@
             gap: 10px;
             margin-top: 10px;
             margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
         
         .checkbox-group input[type="checkbox"] {
             width: auto;
             transform: scale(1.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .checkbox-group input[type="checkbox"]:hover {
+            transform: scale(1.5);
         }
         
         .hidden {
             display: none;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
         }
         
         button[type="submit"] {
@@ -195,15 +280,34 @@
             font-weight: 600;
             cursor: pointer;
             width: 100%;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button[type="submit"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        button[type="submit"]:hover::before {
+            left: 100%;
         }
         
         button[type="submit"]:hover {
             background: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
         
         .loading {
@@ -233,6 +337,7 @@
             margin-bottom: 24px;
             display: none;
             font-weight: 500;
+            animation: fadeIn 0.5s ease-out;
         }
         
         .success {
@@ -255,6 +360,11 @@
             opacity: 0.8;
         }
         
+        .other-input {
+            margin-top: 10px;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
         @media (max-width: 768px) {
             .row {
                 flex-direction: column;
@@ -263,6 +373,15 @@
             
             .form-container {
                 padding: 20px;
+            }
+            
+            .dynamic-field {
+                flex-direction: column;
+            }
+            
+            .remove-btn {
+                width: 100%;
+                padding: 10px;
             }
         }
     </style>
@@ -287,14 +406,7 @@
                                 <label for="state">Estado:</label>
                                 <select id="state" name="state" required>
                                     <option value="">Selecione um estado</option>
-                                    <option value="SP">São Paulo</option>
-                                    <option value="RJ">Rio de Janeiro</option>
-                                    <option value="MG">Minas Gerais</option>
-                                    <option value="RS">Rio Grande do Sul</option>
-                                    <option value="PR">Paraná</option>
-                                    <option value="SC">Santa Catarina</option>
-                                    <option value="BA">Bahia</option>
-                                    <option value="DF">Distrito Federal</option>
+                                    <!-- Estados serão preenchidos via JavaScript -->
                                 </select>
                             </div>
                         </div>
@@ -328,18 +440,29 @@
                     
                     <div class="dynamic-field-container" id="clothes-container">
                         <div class="dynamic-field">
-                            <select name="clothing_types[]" class="clothing-type">
+                            <select name="clothing_types[]" class="clothing-type" onchange="toggleOtherInput(this)">
                                 <option value="">Selecione o tipo</option>
                                 <option value="camiseta">Camiseta</option>
-                                <option value="blusinha">Blusinha</option>
+                                <option value="blusa">Blusa</option>
                                 <option value="camisa">Camisa</option>
+                                <option value="regata">Regata</option>
+                                <option value="blazer">Blazer</option>
                                 <option value="casaco">Casaco</option>
-                                <option value="calca">Calça</option>
+                                <option value="jaqueta">Jaqueta</option>
+                                <option value="calça">Calça</option>
+                                <option value="bermuda">Bermuda</option>
+                                <option value="short">Short</option>
                                 <option value="saia">Saia</option>
                                 <option value="vestido">Vestido</option>
+                                <option value="macacão">Macacão</option>
+                                <option value="terno">Terno</option>
                                 <option value="sapato">Sapato</option>
-                                <option value="tenis">Tênis</option>
-                                <option value="acessorio">Acessório</option>
+                                <option value="tênis">Tênis</option>
+                                <option value="sandália">Sandália</option>
+                                <option value="bota">Bota</option>
+                                <option value="acessório">Acessório</option>
+                                <option value="roupa íntima">Roupa Íntima</option>
+                                <option value="meia">Meia</option>
                                 <option value="outro">Outro</option>
                             </select>
                             <input type="number" name="clothing_prices[]" placeholder="Preço R$" min="0" step="0.01">
@@ -359,7 +482,7 @@
                         <label for="sendMessage">Enviar mensagem automaticamente para lojas qualificadas</label>
                     </div>
                     
-                    <div id="messageField" class="hidden">
+                    <div id="messageField" class="hidden fade-in">
                         <div class="form-group">
                             <label for="contactMessage">Mensagem de contato personalizada:</label>
                             <textarea id="contactMessage" name="contactMessage" rows="5" 
@@ -380,22 +503,41 @@
         </div>
         
         <footer>
-            <p>© 2023 Facontech Prospect - Todos os direitos reservados</p>
+            <p>© 2024 Facontech Prospect - Todos os direitos reservados</p>
         </footer>
     </div>
 
     <script>
-        // Dados de cidades por estado (exemplo simplificado)
-        const citiesByState = {
-            'SP': ['São Paulo', 'Campinas', 'Santos', 'São Bernardo do Campo', 'São José dos Campos', 'Ribeirão Preto', 'Sorocaba'],
-            'RJ': ['Rio de Janeiro', 'Niterói', 'Duque de Caxias', 'Nova Iguaçu', 'Petrópolis', 'Campos dos Goytacazes'],
-            'MG': ['Belo Horizonte', 'Uberlândia', 'Contagem', 'Juiz de Fora', 'Betim', 'Montes Claros'],
-            'RS': ['Porto Alegre', 'Caxias do Sul', 'Pelotas', 'Canoas', 'Santa Maria', 'Novo Hamburgo'],
-            'PR': ['Curitiba', 'Londrina', 'Maringá', 'Ponta Grossa', 'Cascavel', 'São José dos Pinhais'],
-            'SC': ['Florianópolis', 'Joinville', 'Blumenau', 'São José', 'Criciúma', 'Chapecó'],
-            'BA': ['Salvador', 'Feira de Santana', 'Vitória da Conquista', 'Camaçari', 'Itabuna', 'Juazeiro'],
-            'DF': ['Brasília', 'Ceilândia', 'Taguatinga', 'Samambaia', 'Planaltina', 'Sobradinho']
-        };
+        // Dados de estados e cidades do Brasil
+        const brazilStates = [
+            { sigla: 'AC', nome: 'Acre', cidades: ['Rio Branco', 'Cruzeiro do Sul', 'Sena Madureira', 'Tarauacá', 'Feijó'] },
+            { sigla: 'AL', nome: 'Alagoas', cidades: ['Maceió', 'Arapiraca', 'Palmeira dos Índios', 'Rio Largo', 'União dos Palmares'] },
+            { sigla: 'AP', nome: 'Amapá', cidades: ['Macapá', 'Santana', 'Laranjal do Jari', 'Oiapoque', 'Porto Grande'] },
+            { sigla: 'AM', nome: 'Amazonas', cidades: ['Manaus', 'Parintins', 'Itacoatiara', 'Manacapuru', 'Coari'] },
+            { sigla: 'BA', nome: 'Bahia', cidades: ['Salvador', 'Feira de Santana', 'Vitória da Conquista', 'Camaçari', 'Itabuna'] },
+            { sigla: 'CE', nome: 'Ceará', cidades: ['Fortaleza', 'Caucaia', 'Juazeiro do Norte', 'Maracanaú', 'Sobral'] },
+            { sigla: 'DF', nome: 'Distrito Federal', cidades: ['Brasília', 'Ceilândia', 'Taguatinga', 'Samambaia', 'Planaltina'] },
+            { sigla: 'ES', nome: 'Espírito Santo', cidades: ['Vitória', 'Vila Velha', 'Serra', 'Cariacica', 'Linhares'] },
+            { sigla: 'GO', nome: 'Goiás', cidades: ['Goiânia', 'Aparecida de Goiânia', 'Anápolis', 'Rio Verde', 'Luziânia'] },
+            { sigla: 'MA', nome: 'Maranhão', cidades: ['São Luís', 'Imperatriz', 'Timon', 'Caxias', 'Codó'] },
+            { sigla: 'MT', nome: 'Mato Grosso', cidades: ['Cuiabá', 'Várzea Grande', 'Rondonópolis', 'Sinop', 'Tangará da Serra'] },
+            { sigla: 'MS', nome: 'Mato Grosso do Sul', cidades: ['Campo Grande', 'Dourados', 'Três Lagoas', 'Corumbá', 'Ponta Porã'] },
+            { sigla: 'MG', nome: 'Minas Gerais', cidades: ['Belo Horizonte', 'Uberlândia', 'Contagem', 'Juiz de Fora', 'Betim'] },
+            { sigla: 'PA', nome: 'Pará', cidades: ['Belém', 'Ananindeua', 'Santarém', 'Marabá', 'Parauapebas'] },
+            { sigla: 'PB', nome: 'Paraíba', cidades: ['João Pessoa', 'Campina Grande', 'Santa Rita', 'Patos', 'Bayeux'] },
+            { sigla: 'PR', nome: 'Paraná', cidades: ['Curitiba', 'Londrina', 'Maringá', 'Ponta Grossa', 'Cascavel'] },
+            { sigla: 'PE', nome: 'Pernambuco', cidades: ['Recife', 'Jaboatão dos Guararapes', 'Olinda', 'Caruaru', 'Petrolina'] },
+            { sigla: 'PI', nome: 'Piauí', cidades: ['Teresina', 'Parnaíba', 'Picos', 'Floriano', 'Piripiri'] },
+            { sigla: 'RJ', nome: 'Rio de Janeiro', cidades: ['Rio de Janeiro', 'São Gonçalo', 'Duque de Caxias', 'Nova Iguaçu', 'Niterói'] },
+            { sigla: 'RN', nome: 'Rio Grande do Norte', cidades: ['Natal', 'Mossoró', 'Parnamirim', 'São Gonçalo do Amarante', 'Macaíba'] },
+            { sigla: 'RS', nome: 'Rio Grande do Sul', cidades: ['Porto Alegre', 'Caxias do Sul', 'Pelotas', 'Canoas', 'Santa Maria'] },
+            { sigla: 'RO', nome: 'Rondônia', cidades: ['Porto Velho', 'Ji-Paraná', 'Ariquemes', 'Vilhena', 'Cacoal'] },
+            { sigla: 'RR', nome: 'Roraima', cidades: ['Boa Vista', 'Rorainópolis', 'Caracaraí', 'Alto Alegre', 'Mucajaí'] },
+            { sigla: 'SC', nome: 'Santa Catarina', cidades: ['Florianópolis', 'Joinville', 'Blumenau', 'São José', 'Criciúma'] },
+            { sigla: 'SP', nome: 'São Paulo', cidades: ['São Paulo', 'Guarulhos', 'Campinas', 'São Bernardo do Campo', 'Santo André'] },
+            { sigla: 'SE', nome: 'Sergipe', cidades: ['Aracaju', 'Nossa Senhora do Socorro', 'Lagarto', 'Itabaiana', 'Estância'] },
+            { sigla: 'TO', nome: 'Tocantins', cidades: ['Palmas', 'Araguaína', 'Gurupi', 'Porto Nacional', 'Paraíso do Tocantins'] }
+        ];
 
         // Elementos DOM
         const stateSelect = document.getElementById('state');
@@ -407,15 +549,26 @@
         const brandsContainer = document.getElementById('brands-container');
         const clothesContainer = document.getElementById('clothes-container');
         
+        // Preencher estados
+        brazilStates.forEach(state => {
+            const option = document.createElement('option');
+            option.value = state.sigla;
+            option.textContent = state.nome;
+            stateSelect.appendChild(option);
+        });
+        
         // Quando o estado é alterado, atualiza as cidades
         stateSelect.addEventListener('change', function() {
-            const state = this.value;
-            citySelect.disabled = !state;
+            const stateSigla = this.value;
+            citySelect.disabled = !stateSigla;
             
             // Limpar options anteriores
             citySelect.innerHTML = '';
             
-            if (state) {
+            if (stateSigla) {
+                // Encontrar o estado selecionado
+                const selectedState = brazilStates.find(state => state.sigla === stateSigla);
+                
                 // Adicionar opção padrão
                 const defaultOption = document.createElement('option');
                 defaultOption.value = '';
@@ -423,7 +576,7 @@
                 citySelect.appendChild(defaultOption);
                 
                 // Adicionar cidades do estado selecionado
-                citiesByState[state].forEach(city => {
+                selectedState.cidades.forEach(city => {
                     const option = document.createElement('option');
                     option.value = city;
                     option.textContent = city;
@@ -450,6 +603,24 @@
         let brandCount = 1;
         let clothingCount = 1;
         
+        // Atualizar estado dos botões de adicionar
+        function updateAddButtons() {
+            addBrandBtn.disabled = brandCount >= 5;
+            addClothingBtn.disabled = clothingCount >= 5;
+            
+            if (brandCount >= 5) {
+                addBrandBtn.title = "Máximo de 5 marcas atingido";
+            } else {
+                addBrandBtn.title = "";
+            }
+            
+            if (clothingCount >= 5) {
+                addClothingBtn.title = "Máximo de 5 peças atingido";
+            } else {
+                addClothingBtn.title = "";
+            }
+        }
+        
         // Adicionar campo de marca
         addBrandBtn.addEventListener('click', function() {
             if (brandCount < 5) {
@@ -466,9 +637,10 @@
                 newField.querySelector('.remove-btn').addEventListener('click', function() {
                     newField.remove();
                     brandCount--;
+                    updateAddButtons();
                 });
-            } else {
-                alert('Máximo de 5 marcas permitidas.');
+                
+                updateAddButtons();
             }
         });
         
@@ -478,18 +650,29 @@
                 const newField = document.createElement('div');
                 newField.className = 'dynamic-field';
                 newField.innerHTML = `
-                    <select name="clothing_types[]" class="clothing-type">
+                    <select name="clothing_types[]" class="clothing-type" onchange="toggleOtherInput(this)">
                         <option value="">Selecione o tipo</option>
                         <option value="camiseta">Camiseta</option>
-                        <option value="blusinha">Blusinha</option>
+                        <option value="blusa">Blusa</option>
                         <option value="camisa">Camisa</option>
+                        <option value="regata">Regata</option>
+                        <option value="blazer">Blazer</option>
                         <option value="casaco">Casaco</option>
-                        <option value="calca">Calça</option>
+                        <option value="jaqueta">Jaqueta</option>
+                        <option value="calça">Calça</option>
+                        <option value="bermuda">Bermuda</option>
+                        <option value="short">Short</option>
                         <option value="saia">Saia</option>
                         <option value="vestido">Vestido</option>
+                        <option value="macacão">Macacão</option>
+                        <option value="terno">Terno</option>
                         <option value="sapato">Sapato</option>
-                        <option value="tenis">Tênis</option>
-                        <option value="acessorio">Acessório</option>
+                        <option value="tênis">Tênis</option>
+                        <option value="sandália">Sandália</option>
+                        <option value="bota">Bota</option>
+                        <option value="acessório">Acessório</option>
+                        <option value="roupa íntima">Roupa Íntima</option>
+                        <option value="meia">Meia</option>
                         <option value="outro">Outro</option>
                     </select>
                     <input type="number" name="clothing_prices[]" placeholder="Preço R$" min="0" step="0.01">
@@ -502,11 +685,31 @@
                 newField.querySelector('.remove-btn').addEventListener('click', function() {
                     newField.remove();
                     clothingCount--;
+                    updateAddButtons();
                 });
-            } else {
-                alert('Máximo de 5 peças de roupa permitidas.');
+                
+                updateAddButtons();
             }
         });
+        
+        // Função para mostrar campo "Outro"
+        function toggleOtherInput(selectElement) {
+            const fieldContainer = selectElement.closest('.dynamic-field');
+            let otherInput = fieldContainer.querySelector('.other-input');
+            
+            if (selectElement.value === 'outro') {
+                if (!otherInput) {
+                    otherInput = document.createElement('div');
+                    otherInput.className = 'other-input';
+                    otherInput.innerHTML = `
+                        <input type="text" name="clothing_other[]" placeholder="Especifique o tipo de peça" class="brand-input">
+                    `;
+                    fieldContainer.appendChild(otherInput);
+                }
+            } else if (otherInput) {
+                otherInput.remove();
+            }
+        }
         
         // Envio do formulário
         document.getElementById('prospectionForm').addEventListener('submit', async function(e) {
@@ -550,12 +753,21 @@
                 .map(select => select.value);
             const clothingPrices = Array.from(document.getElementsByName('clothing_prices[]'))
                 .map(input => input.value);
+            const clothingOther = Array.from(document.getElementsByName('clothing_other[]'))
+                .map(input => input.value);
                 
             const clothingData = [];
             for (let i = 0; i < clothingTypes.length; i++) {
                 if (clothingTypes[i] && clothingPrices[i]) {
+                    let type = clothingTypes[i];
+                    
+                    // Se for "outro", usar o valor do campo de texto
+                    if (type === 'outro' && clothingOther[i]) {
+                        type = clothingOther[i];
+                    }
+                    
                     clothingData.push({
-                        type: clothingTypes[i],
+                        type: type,
                         price: clothingPrices[i]
                     });
                 }
@@ -594,11 +806,41 @@
                     this.reset();
                     // Resetar campos dinâmicos
                     brandsContainer.innerHTML = '<div class="dynamic-field"><input type="text" name="brands[]" placeholder="Digite o nome da marca" class="brand-input"></div>';
-                    clothesContainer.innerHTML = '<div class="dynamic-field"><select name="clothing_types[]" class="clothing-type"><option value="">Selecione o tipo</option><option value="camiseta">Camiseta</option><option value="blusinha">Blusinha</option><option value="camisa">Camisa</option><option value="casaco">Casaco</option><option value="calca">Calça</option><option value="saia">Saia</option><option value="vestido">Vestido</option><option value="sapato">Sapato</option><option value="tenis">Tênis</option><option value="acessorio">Acessório</option><option value="outro">Outro</option></select><input type="number" name="clothing_prices[]" placeholder="Preço R$" min="0" step="0.01"></div>';
+                    clothesContainer.innerHTML = `
+                        <div class="dynamic-field">
+                            <select name="clothing_types[]" class="clothing-type" onchange="toggleOtherInput(this)">
+                                <option value="">Selecione o tipo</option>
+                                <option value="camiseta">Camiseta</option>
+                                <option value="blusa">Blusa</option>
+                                <option value="camisa">Camisa</option>
+                                <option value="regata">Regata</option>
+                                <option value="blazer">Blazer</option>
+                                <option value="casaco">Casaco</option>
+                                <option value="jaqueta">Jaqueta</option>
+                                <option value="calça">Calça</option>
+                                <option value="bermuda">Bermuda</option>
+                                <option value="short">Short</option>
+                                <option value="saia">Saia</option>
+                                <option value="vestido">Vestido</option>
+                                <option value="macacão">Macacão</option>
+                                <option value="terno">Terno</option>
+                                <option value="sapato">Sapato</option>
+                                <option value="tênis">Tênis</option>
+                                <option value="sandália">Sandália</option>
+                                <option value="bota">Bota</option>
+                                <option value="acessório">Acessório</option>
+                                <option value="roupa íntima">Roupa Íntima</option>
+                                <option value="meia">Meia</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                            <input type="number" name="clothing_prices[]" placeholder="Preço R$" min="0" step="0.01">
+                        </div>
+                    `;
                     messageField.classList.add('hidden');
                     document.getElementById('sendMessage').checked = false;
                     brandCount = 1;
                     clothingCount = 1;
+                    updateAddButtons();
                 } else {
                     throw new Error(result.message || 'Erro no servidor');
                 }
@@ -622,6 +864,9 @@
                 notification.style.display = 'none';
             }, 5000);
         }
+        
+        // Inicializar botões
+        updateAddButtons();
     </script>
 </body>
 </html>
