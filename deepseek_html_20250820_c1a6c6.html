@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferramenta de Prospecção - GrowthMax</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary: #4f46e5;
+            --success: #059669;
+            --danger: #dc2626;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-800: #1f2937;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        header p {
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        
+        .brands-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            transform: scale(1.2);
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        button:hover {
+            background: var(--primary-hover);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .notification {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: none;
+            font-weight: 500;
+        }
+        
+        .success {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+        
+        .error {
+            background-color: #fef2f2;
+            color: var(--danger);
+            border-left: 4px solid var(--danger);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray-800);
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 20px;
+            }
+            
+            .brands-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 GrowthMax Prospector</h1>
+            <p>Encontre e entre em contato com lojas potenciais automaticamente</p>
+        </header>
+        
+        <div class="form-container">
+            <div id="notification" class="notification"></div>
+            
+            <form id="prospectionForm">
+                <div class="form-group">
+                    <label for="region">Região/Cidades (separar por vírgula):</label>
+                    <input type="text" id="region" name="region" required 
+                           placeholder="Ex: São Paulo, Campinas, Santos">
+                </div>
+                
+                <div class="form-group">
+                    <label>Marcas para identificar (preencha pelo menos uma):</label>
+                    <div class="brands-container">
+                        <input type="text" name="brands[]" placeholder="Marca 1" class="brand-input">
+                        <input type="text" name="brands[]" placeholder="Marca 2">
+                        <input type="text" name="brands[]" placeholder="Marca 3">
+                        <input type="text" name="brands[]" placeholder="Marca 4">
+                        <input type="text" name="brands[]" placeholder="Marca 5">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contactMessage">Mensagem de contato personalizada:</label>
+                    <textarea id="contactMessage" name="contactMessage" rows="5" 
+                              placeholder="Olá, encontramos sua loja através de nossa ferramenta e notamos que você trabalha com marcas premium. Gostaríamos de apresentar nossas soluções..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="checkbox-group">
+                        <input type="checkbox" name="sendMessage" value="true">
+                        Enviar mensagem automaticamente para lojas qualificadas
+                    </label>
+                </div>
+                
+                <button type="submit" id="submitBtn">
+                    <span>🚀 Iniciar Prospecção</span>
+                </button>
+            </form>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Processando sua solicitação...</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 GrowthMax Prospector - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('prospectionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const notification = document.getElementById('notification');
+            
+            // Validação
+            const region = document.getElementById('region').value.trim();
+            if (!region) {
+                showNotification('Por favor, informe pelo menos uma região ou cidade', 'error');
+                return;
+            }
+            
+            const brands = Array.from(document.getElementsByName('brands[]'))
+                .map(input => input.value.trim())
+                .filter(brand => brand.length > 0);
+                
+            if (brands.length === 0) {
+                showNotification('Por favor, preencha pelo menos uma marca', 'error');
+                return;
+            }
+            
+            const contactMessage = document.getElementById('contactMessage').value.trim();
+            if (!contactMessage) {
+                showNotification('Por favor, escreva uma mensagem de contato', 'error');
+                return;
+            }
+            
+            // Preparar dados
+            const formData = new FormData(this);
+            const data = {
+                region: formData.get('region').split(',').map(r => r.trim()),
+                brands: brands,
+                contactMessage: contactMessage,
+                sendMessage: formData.get('sendMessage') === 'true',
+                timestamp: new Date().toISOString()
+            };
+            
+            // UI Feedback
+            submitBtn.disabled = true;
+            loading.style.display = 'block';
+            notification.style.display = 'none';
+            
+            try {
+                // URL do webhook do n8n - VOCÊ PRECISARÁ ALTERAR ESTA URL
+                const response = await fetch('https://seu-webhook-n8n.com/prospection', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showNotification('✅ Prospecção iniciada com sucesso! Verifique seu email em breve com os resultados.', 'success');
+                    this.reset();
+                } else {
+                    throw new Error(result.message || 'Erro no servidor');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showNotification('❌ Erro ao conectar com o servidor. Verifique sua conexão e tente novamente.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        });
+        
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            // Auto-esconder após 5 segundos
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
